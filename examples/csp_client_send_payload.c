@@ -135,7 +135,7 @@ int main(int argc, char * argv[]) {
 	const char * rtable __maybe_unused = NULL;
 	csp_iface_t * default_iface;
 	struct timespec start_time;
-	unsigned int count;
+	// unsigned int count;
 	int ret = EXIT_SUCCESS;
     int opt;
 
@@ -226,7 +226,7 @@ int main(int argc, char * argv[]) {
     /* Start client work */
 	csp_print("Client started\n");
 	clock_gettime(CLOCK_MONOTONIC, &start_time);
-	count = 'A';
+	// count = 'A';
 
 	while (1) {
 		struct timespec current_time;
