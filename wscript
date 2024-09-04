@@ -261,6 +261,13 @@ def build(ctx):
                         target='examples/zmqproxy',
                         lib=ctx.env.LIBS,
                         use='csp')
+            
+        # Build for csp_client_send_payload
+        ctx.program(source=['examples/csp_client_send_payload.c',
+                            'examples/csp_client_send_payload_{0}.c'.format(ctx.env.OS)],
+                    target='examples/csp_client_send_payload',
+                    lib=ctx.env.LIBS,
+                    use='csp')
 
 
 def dist(ctx):

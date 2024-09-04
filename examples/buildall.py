@@ -57,9 +57,6 @@ def build_with_waf():
 
     subprocess.check_call(['./waf', 'distclean', 'configure', 'build'])
     subprocess.check_call(['./waf', 'distclean', 'configure', 'build'] + options)
-    
-    # Explicitly build the csp_client_send_payload target
-    subprocess.check_call(['./waf', 'build', 'examples/csp_client_send_payload'])
 
 
 def main(build_system):
