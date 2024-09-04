@@ -267,10 +267,10 @@ int main(int argc, char * argv[]) {
 		}
 
 		/* 3. Copy data to packet */
-		/* memcpy(packet->data, "Hello world ", 12);
-		memcpy(packet->data + 12, &count, 1);
-		memset(packet->data + 13, 0, 1);
-		count++; */
+		// memcpy(packet->data, "Hello world ", 12);
+		// memcpy(packet->data + 12, &count, 1);
+		// memset(packet->data + 13, 0, 1);
+		// count++; 
 
 		memcpy(packet->data, "Harry Potter and the Deathly Hallows", 34);
 		memset(packet->data + 34, 0, 1);
