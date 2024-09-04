@@ -250,6 +250,13 @@ def build(ctx):
                     target='examples/csp_client',
                     lib=ctx.env.LIBS,
                     use='csp')
+        
+        # Build for csp_client_send_payload
+        ctx.program(source=['examples/csp_client_send_payload.c',
+                            'examples/csp_client_send_payload_{0}.c'.format(ctx.env.OS)],
+                    target='examples/csp_client_send_payload',
+                    lib=ctx.env.LIBS,
+                    use='csp')
 
         ctx.program(source='examples/csp_arch.c',
                     target='examples/csp_arch',
@@ -262,12 +269,7 @@ def build(ctx):
                         lib=ctx.env.LIBS,
                         use='csp')
             
-        # Build for csp_client_send_payload
-        ctx.program(source=['examples/csp_client_send_payload.c',
-                            'examples/csp_client_send_payload_{0}.c'.format(ctx.env.OS)],
-                    target='examples/csp_client_send_payload',
-                    lib=ctx.env.LIBS,
-                    use='csp')
+        
 
 
 def dist(ctx):

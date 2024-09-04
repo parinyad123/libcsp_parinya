@@ -103,3 +103,56 @@ jobs:
         run: |
           ./build/examples/csp_client -c vcan0 -a 2 -C 1 -T 10 &
           ./build/examples/csp_server -c vcan0 -a 1 -t
+
+# ========================== Client Send Payload ======================================================================
+
+      - name: Run KISS Client Send Payload Test
+          run: |
+            socat -d -d -d pty,raw,echo=0,link=/tmp/pty1 pty,raw,echo=0,link=/tmp/pty2 &
+            sleep 1
+            ./build/examples/csp_server -k /tmp/pty1 -a 1 -T 10 &
+            ./build/examples/csp_client_send_payload -k /tmp/pty2 -a 2 -C 1 -t
+            pkill socat
+
+        - name: Run KISS Server Payload Test
+          run: |
+            socat -d -d -d pty,raw,echo=0,link=/tmp/pty1 pty,raw,echo=0,link=/tmp/pty2 &
+            sleep 1
+            ./build/examples/csp_client_send_payload -k /tmp/pty2 -a 2 -C 1 -T 10 &
+            ./build/examples/csp_server -k /tmp/pty1 -a 1 -t
+            pkill socat
+
+        - name: Run ZMQ Client Send Payload Test
+          run: |
+            ./build/examples/zmqproxy &
+            ./build/examples/csp_server -z localhost -a 1 -T 10 &
+            ./build/examples/csp_client_send_payload -z localhost -a 2 -C 1 -t
+            pkill zmqproxy
+
+        - name: Run ZMQ Server Payload Test
+          run: |
+            ./build/examples/zmqproxy &
+            ./build/examples/csp_client_send_payload -z localhost -a 2 -C 1 -T 10 &
+            ./build/examples/csp_server -z localhost -a 1 -t
+            pkill zmqproxy
+
+        - name: Setup vcan0
+          run: |
+            sudo modprobe vcan
+            sudo ip link add dev vcan0 type vcan
+            sudo ip link set up vcan0
+            echo "Waiting for vcan0 to be up..."
+            while ! ip -br link show vcan0 | grep -q "UP"; do
+              sleep 0.1
+            done
+            echo "vcan0 is up"
+
+        - name: Run CAN Server Payload Test
+          run: |
+            ./build/examples/csp_server -c vcan0 -a 1 -T 10 &
+            ./build/examples/csp_client_send_payload -c vcan0 -a 2 -C 1 -t
+
+        - name: Run CAN Client Send Payload Test
+          run: |
+            ./build/examples/csp_client_send_payload -c vcan0 -a 2 -C 1 -T 10 &
+            ./build/examples/csp_server -c vcan0 -a 1 -t
