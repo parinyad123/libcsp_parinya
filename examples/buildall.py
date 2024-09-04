@@ -27,7 +27,8 @@ def build_with_cmake():
                'examples/csp_server',
                'examples/csp_client',
                'examples/csp_arch',
-               'examples/zmqproxy']
+               'examples/zmqproxy',
+               'examples/csp_client_send_payload']
     builddir = 'build'
 
     cmake_setup = ['cmake', '-GNinja', '-B' + builddir]
