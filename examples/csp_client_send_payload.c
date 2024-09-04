@@ -240,13 +240,14 @@ int main(int argc, char * argv[]) {
         if (result >= 0) {
             ++successful_ping;
         }
+		csp_print("Start Send reboot request to server\n");
 
 		/* Send reboot request to server, the server has no actual implementation of csp_sys_reboot() and fails to reboot */
-		// csp_reboot(server_address);
-		// csp_print("reboot system request sent to address: %u\n", server_address);
+		/* csp_reboot(server_address); */
+		/* csp_print("reboot system request sent to address: %u\n", server_address); */
 
 		/* Send data packet (string) to server */
-
+		csp_print("Start send data packet (string) to server\n");
 		/* 1. Connect to host on 'server_address', port SERVER_PORT with regular UDP-like protocol and 1000 ms timeout */
 		csp_conn_t * conn = csp_connect(CSP_PRIO_NORM, server_address, SERVER_PORT, 1000, CSP_O_NONE);
 		if (conn == NULL) {
