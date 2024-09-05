@@ -324,7 +324,7 @@ int main(int argc, char * argv[]) {
 			inputStr = readUnlimitedString(&byteCount);
 
 			if (inputStr != NULL) {
-				memccpy(packet->data, inputStr, byteCount);
+				memcpy(packet->data, inputStr, byteCount);
 				memset(packet->data + byteCount, 0, 1);
 				free(inputStr);  // Free the allocated memory after use
 
