@@ -127,6 +127,43 @@ csp_iface_t * add_interface(enum DeviceType device_type, const char * device_nam
 	return default_iface;
 }
 
+// Function to read an unlimited-length string from the user and return the string and its byte count
+char* readUnlimitedString(size_t *byteCount) {
+    char *str;
+    int c;
+    size_t len = 0;
+    size_t size = 10;
+
+    str = malloc(size * sizeof(char));  // Initial memory allocation
+
+    if (str == NULL) {
+        csp_print("Memory allocation failed!\n");
+        *byteCount = 0;
+        return NULL;
+    }
+
+    while ((c = getchar()) != '\n' && c != EOF) {
+        str[len++] = c;
+
+        // If the length reaches the allocated size, double the size
+        if (len == size) {
+            size *= 2;
+            str = realloc(str, size * sizeof(char));
+
+            if (str == NULL) {
+                csp_print("Memory reallocation failed!\n");
+                *byteCount = 0;
+                return NULL;
+            }
+        }
+    }
+
+    str[len] = '\0';  // Null-terminate the string
+    *byteCount = len; // Set the byte count
+
+    return str;  // Return the dynamically allocated string
+}
+
 /* main - initialization of CSP and start of client task */
 int main(int argc, char * argv[]) {
 
@@ -138,6 +175,9 @@ int main(int argc, char * argv[]) {
 	// unsigned int count;
 	int ret = EXIT_SUCCESS;
     int opt;
+
+	char *inputStr;
+    size_t byteCount;
 
 	while ((opt = getopt_long(argc, argv, OPTION_c OPTION_z OPTION_R "k:a:C:tT:h", long_options, NULL)) != -1) {
         switch (opt) {
@@ -272,8 +312,27 @@ int main(int argc, char * argv[]) {
 		// memset(packet->data + 13, 0, 1);
 		// count++; 
 
-		memcpy(packet->data, "Harry Potter and the Deathly Hallows", 34);
-		memset(packet->data + 34, 0, 1);
+		// memcpy(packet->data, "Harry Potter and the Deathly Hallows", 34);
+		// memset(packet->data + 34, 0, 1);
+
+		while (1) {
+			csp_print("Enter data to send to server: ");
+
+			// Call the function to get the string and byte count
+			inputStr = readUnlimitedString(&byteCount);
+
+			if (inputStr != NULL) {
+				memccpy(packet->data, inputStr, byteCount);
+				memset(packet->data + byteCount, 0, 1);
+				free(inputStr);  // Free the allocated memory after use
+
+				break; // If data is successfully acquired, break out of the loop
+			} else if (inputStr == NULL) {
+				csp_print("Failed to allocate memory. Please try again.\n");
+			} else if (byteCount == 0) {
+            	csp_print("Empty string entered. Please enter a non-empty string.\n");
+			}
+		}
 
 		/* 4. Set packet length */
 		packet->length = (strlen((char *) packet->data) + 1); /* include the 0 termination */
