@@ -5,6 +5,8 @@
 #include <getopt.h>
 #include <time.h>
 
+#include <stdio.h>
+
 #include <csp/csp.h>
 #include <csp/drivers/usart.h>
 #include <csp/drivers/can_socketcan.h>
